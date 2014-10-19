@@ -1,0 +1,5 @@
+- name: Install openjdk
+  apt: name={{ item }} state=present
+  sudo: yes
+  with_items:
+    - openjdk-7-jdk

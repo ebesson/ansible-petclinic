@@ -1,0 +1,31 @@
+- name: Add group "tomcat"
+  group: name=tomcat
+
+- name: Add user "tomcat"
+  user: name=tomcat group=tomcat home=/usr/share/tomcat
+  sudo: True
+
+- name: delete home dir for symlink of tomcat
+  shell: rm -fr /usr/share/tomcat
+  sudo: True
+
+- name: Download Tomcat
+  get_url: url=http://apache.crihan.fr/dist/tomcat/tomcat-7/v7.0.56/bin/apache-tomcat-7.0.56.tar.gz dest=/opt/apache-tomcat-7.0.56.tar.gz
+
+- name: Extract archive
+  command: chdir=/usr/share /bin/tar xvf /opt/apache-tomcat-7.0.56.tar.gz -C /opt/ creates=/opt/apache-tomcat-7.0.56
+
+- name: Symlink install directory
+  file: src=/opt/apache-tomcat-7.0.56 path=/usr/share/tomcat state=link
+
+- name: Change ownership of Tomcat installation
+  file: path=/usr/share/tomcat/ owner=tomcat group=tomcat state=directory recurse=yes
+
+- name: Install Tomcat init script
+  copy: src=tomcat-initscript.sh dest=/etc/init.d/tomcat mode=0756
+
+- name: Start Tomcat
+  service: name=tomcat state=started enabled=yes
+
+- name: Remove Tomcat archive
+  command: chdir=/opt rm -rf apache-tomcat-7.0.56.tar.gz

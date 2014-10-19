@@ -1,0 +1,8 @@
+- name: tomcat-start
+  service: name=tomcat state=restarted
+
+- name: tomcat-restart
+  service: name=tomcat state=restarted
+
+- name: tomcat-stop
+  service: name=tomcat state=stopped

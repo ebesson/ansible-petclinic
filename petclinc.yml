@@ -1,0 +1,12 @@
+- name: Ansible-petclinic
+  hosts: aws_server
+  user: ubuntu
+  sudo: yes 
+  roles:
+    #- common
+    #- java
+    #- maven
+    #- mysql
+    #- tomcat
+    - application
+

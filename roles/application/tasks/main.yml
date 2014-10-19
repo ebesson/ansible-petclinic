@@ -1,0 +1,36 @@
+- name: Stop tomcat server  
+  service: name=tomcat state=stopped 
+
+- name: Copy source
+  copy: src=spring-petclinic.tar.gz  dest=/tmp
+  git: repo=https://github.com/spring-projects/spring-petclinic.git dest=/tmp/spring-petclinic version=0a03a05590635ead34e4d0bd54c51e5b138fbdae
+
+- name: Extract source
+  command: chdir=/tmp /bin/tar xvf spring-petclinic.tar.gz -C /tmp/ creates=/opt/spring-petclinic
+
+- name: Update pom.xml
+  copy: src=pom.xml dest=/tmp/spring-petclinic/pom.xml owner=root group=root mode=644 backup=yes
+
+- name: Change database to MySql
+  copy: src=data-access.properties dest=/tmp/spring-petclinic/src/main/resources/spring/data-access.properties owner=root group=root mode=644 backup=yes
+
+- name: Build and package application
+  sudo: yes
+  shell: chdir=/tmp/spring-petclinic mvn clean package -DskipTests
+  environment:
+    PATH: /opt/apache-maven-3.2.3/bin:{{ ansible_env.PATH }}
+
+- name: Deploy application
+  command: chdir=/tmp/spring-petclinic/target cp petclinic.war /opt/apache-tomcat-7.0.56/webapps 
+
+- name: Remove source
+  command: chdir=/tmp rm -rf spring-petclinic spring-petclinic.tar.gz
+
+- name: Change application ownership
+  file: path=/opt/apache-tomcat-7.0.56/webapps/petclinic.war group=tomcat owner=tomcat state=file  mode=0755
+
+- name: Create database petclinic
+  mysql_db: name=petclinic state=present login_user=root  login_password=admin
+
+- name: Restart tomcat server  
+  service: name=tomcat state=started 

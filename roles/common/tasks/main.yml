@@ -1,0 +1,7 @@
+- name: Install common tools
+  sudo: yes
+  apt: name={{ item }} state=present update_cache=yes
+  with_items:
+    - htop
+    - wget
+    - git

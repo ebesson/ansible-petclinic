@@ -1,0 +1,8 @@
+- name: Download Maven
+  get_url: url=http://apache.crihan.fr/dist/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz dest=/opt/apache-maven-3.2.3-bin.tar.gz
+
+- name: Extract archive
+  command: chdir=/usr/share /bin/tar xvf /opt/apache-maven-3.2.3-bin.tar.gz -C /opt/ creates=/opt/apache-maven-3.2.3
+
+- name: Remove Maven archive
+  command: chdir=/opt rm -rf apache-maven-3.2.3-bin.tar.gz
