@@ -3,10 +3,10 @@
   user: ubuntu
   sudo: yes 
   roles:
-    #- common
-    #- java
-    #- maven
-    #- mysql
-    #- tomcat
+    - common
+    - java
+    - maven
+    - mysql
+    - tomcat
     - application
 
