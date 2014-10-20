@@ -1,12 +1,12 @@
 - name: Stop tomcat server  
   service: name=tomcat state=stopped 
 
-- name: Copy source
-  copy: src=spring-petclinic.tar.gz  dest=/tmp
+- name: Clone source from https://github.com/spring-projects/spring-petclinic.git
+  #copy: src=spring-petclinic.tar.gz  dest=/tmp
   git: repo=https://github.com/spring-projects/spring-petclinic.git dest=/tmp/spring-petclinic version=0a03a05590635ead34e4d0bd54c51e5b138fbdae
 
-- name: Extract source
-  command: chdir=/tmp /bin/tar xvf spring-petclinic.tar.gz -C /tmp/ creates=/opt/spring-petclinic
+#- name: Extract source
+#  command: chdir=/tmp /bin/tar xvf spring-petclinic.tar.gz -C /tmp/ creates=/opt/spring-petclinic
 
 - name: Update pom.xml
   copy: src=pom.xml dest=/tmp/spring-petclinic/pom.xml owner=root group=root mode=644 backup=yes
@@ -33,4 +33,4 @@
   mysql_db: name=petclinic state=present login_user=root  login_password=admin
 
 - name: Restart tomcat server  
-  service: name=tomcat state=started 
+  service: name=tomcat state=started enabled=yes
