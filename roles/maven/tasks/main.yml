@@ -1,10 +1,17 @@
+- name: Check for previous installation
+  sudo: yes
+  shell: "[ -f /usr/bin/mvn ]"
+  ignore_errors: True
+  register: maven_exists
+
 - name: Add Maven3 repository
   apt_repository: repo='deb http://ppa.launchpad.net/natecarlson/maven3/ubuntu precise main' state=present
 
 - name: Install maven 3
   apt: name=maven3 state=present update_cache=yes force=yes
-
+  
 - name: Add symbolic link
   sudo: yes
   command: chdir=/tmp ln -s /usr/share/maven3/bin/mvn /usr/bin/mvn
+  when: maven_exists|failed
   
