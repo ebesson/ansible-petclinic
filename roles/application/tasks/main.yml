@@ -33,4 +33,5 @@
   mysql_db: name=petclinic state=present login_user=root  login_password=admin
 
 - name: Restart tomcat server  
-  service: name=tomcat state=started enabled=yes
+  sudo: yes
+  command: service tomcat start
