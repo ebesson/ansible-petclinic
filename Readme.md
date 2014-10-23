@@ -1,8 +1,8 @@
 ansible-petclinic
 ==================
-
-ansible-playbook petclinc.yml -i hosts
-
+- Install pip : sudo apt-get install python-pip
+- Install ansible : sudo pip install ansible
+- Launch playbook : ansible-playbook petclinc.yml -i hosts
 
 For Ubuntu instances:
 
